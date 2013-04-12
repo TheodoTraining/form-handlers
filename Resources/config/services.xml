@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
+            <tag name="twig.extension" />
+            <argument type="service" id="twig.loader" />
+        </service>
+
+        <service id="acme.demo.listener" class="Acme\DemoBundle\EventListener\ControllerListener">
+            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />
+            <argument type="service" id="twig.extension.acme.demo" />
+        </service>
+
+        <service id="acme.headers_collector" class="Acme\DemoBundle\Collector\HeadersCollector">
+            <tag name="data_collector" template="AcmeDemoBundle:Collector:headers.html.twig" id="acme_headers" />
+        </service>
+
+        <service id="acme.contact_type" class="Acme\DemoBundle\Form\ContactType">
+            <tag name="form.type" alias="contact" />
+        </service>
+
+        <service id="acme.contact_form" class="Symfony\Component\Form\Form"
+            factory-service="form.factory"
+            factory-method="create"
+            >
+            <argument>contact</argument>
+        </service>
+
+        <service id="acme.form_handler" class="Acme\DemoBundle\Form\FormHandler" scope="request">
+            <argument type="service" id="acme.contact_form"/>
+            <argument type="service" id="request"/>
+        </service>
+    </services>
+</container>

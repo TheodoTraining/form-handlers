@@ -1,0 +1,11 @@
+{% extends "AcmeDemoBundle::layout.html.twig" %}
+
+{% block content %}
+{{ hasErrors ? 'Error' : 'OK' }}
+
+<form method="POST" novalidate="true">
+{{ form_widget(form) }}
+
+<input type="submit" value="ok"/>
+</form>
+{% endblock %}
